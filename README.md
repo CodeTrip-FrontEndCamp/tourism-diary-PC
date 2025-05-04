@@ -1,2 +1,2 @@
 # tourism-diary-PC
-PC
+PC站点
