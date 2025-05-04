@@ -1,2 +1,2 @@
-# tourism-diary-PC
-PC站点
+# tourism-diary-pc
+
