@@ -1,16 +1,18 @@
 import { logindata } from "@/pages/Login";
 import { request } from "@/utils";
 import { Dispatch, createSlice } from "@reduxjs/toolkit";
+import { setToken as _setToken, getToken } from "@/utils";
 
 const userStore = createSlice({
     name: 'user',
     initialState: {
-        token: ''
+        token: getToken() || ''
     },
     reducers: {
         setToken(state, action) {
             state.token = action.payload
-        }//同步修改
+            _setToken(action.payload)
+        }
     }
 })
 
