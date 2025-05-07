@@ -1,12 +1,17 @@
 //axios封装处理
 //1.根域名配置，2.超时时间，3.请求拦截器/响应拦截器
 import axios from 'axios'
+import { getToken,removeToken } from './token'
 
 const request =axios.create({
    baseURL:'http://47.116.215.205:3001',//根域名
    timeout:5000,//超时时间五秒
 })
 request.interceptors.request.use((config)=> {
+  const token=getToken()
+  if(token){
+    config.headers.Authorization=`Bearer ${token}`//根据后端要求拼接
+  }
     return config
   }, (error)=> {
     return Promise.reject(error)
