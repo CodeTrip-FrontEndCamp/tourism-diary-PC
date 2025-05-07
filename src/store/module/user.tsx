@@ -18,5 +18,14 @@ const { setToken } = userStore.actions
 
 const userReducer = userStore.reducer
 
-export { setToken}
+
+// 异步请求登录
+const fetchLogin: (loginForm: logindata) => (dispatch: Dispatch) => Promise<void> = (loginForm) => {
+    return async (dispatch: Dispatch) => {
+        const res = await request.post('/login', loginForm)
+        dispatch(setToken(res.data.token))
+    }
+}
+
+export { setToken, fetchLogin }
 export default userReducer

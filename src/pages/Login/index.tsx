@@ -1,6 +1,9 @@
 import "./index.scss";
-import { Card, Form, Input, Button, Radio } from "antd";
+import { Card, Form, Input, Button, Radio ,message} from "antd";
 import logo from "@/assets/logo.png";
+import { useAppDispatch } from '@/store/hook';
+import { fetchLogin } from '@/store/module/user';
+import { useNavigate } from 'react-router-dom';
 
 export interface logindata {
   moblie: string,
@@ -9,9 +12,15 @@ export interface logindata {
 }
 
 const Login = () => {
-  const onFinish=(values:logindata)=>{
-    console.log(values)
-   }
+  const navigate = useNavigate()
+  const dispatch = useAppDispatch()
+  const onFinish = async (values: logindata) => {
+    await dispatch(fetchLogin(values))
+    navigate('/')
+    message.success('登录成功')
+  };
+
+  
 
   return (
     <div className="login">
