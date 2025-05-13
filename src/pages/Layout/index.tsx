@@ -1,15 +1,10 @@
-import { Layout, Menu, Popconfirm } from 'antd'
-import {
-  HomeOutlined,
-  DiffOutlined,
-  EditOutlined,
-  LogoutOutlined,
-} from '@ant-design/icons'
-import './index.scss'
-import { Outlet, useLocation, useNavigate } from 'react-router-dom'
-import { useEffect } from 'react'
-import { exitUser, fetchUser } from '@/store/module/user'
-import { useAppDispatch, useAppSelector } from '@/store/hook'
+import { Layout, Menu, Popconfirm } from "antd";
+import { HomeOutlined, DiffOutlined, LogoutOutlined } from "@ant-design/icons";
+import "./index.scss";
+import { Outlet, useLocation, useNavigate } from "react-router-dom";
+import { useEffect } from "react";
+import { userLogout, getProfile } from "@/store/modules/user";
+import { useAppDispatch, useAppSelector } from "@/store/hooks";
 
 const { Header, Sider } = Layout;
 
@@ -28,18 +23,18 @@ const items = [
 
 const GeekLayout = () => {
   const navigate = useNavigate();
-  const location=useLocation()
-  const selected=location.pathname
-  const dispatch = useAppDispatch()
-  const name = useAppSelector(state => state.user.user.name)
+  const location = useLocation();
+  const selected = location.pathname;
+  const dispatch = useAppDispatch();
+  const { name } = useAppSelector((state) => state.user.userInfo);
   useEffect(() => {
-    dispatch(fetchUser())
-  }, [dispatch])
+    dispatch(getProfile());
+  }, [dispatch]);
 
-  const onconfirm = () => {
-    dispatch(exitUser())
-    navigate('/login')
-  }
+  const onConfirm = () => {
+    dispatch(userLogout());
+    navigate("/login");
+  };
   return (
     <Layout>
       <Header className="header">
@@ -47,7 +42,12 @@ const GeekLayout = () => {
         <div className="user-info">
           <span className="user-name">{name}</span>
           <span className="user-logout">
-            <Popconfirm title="是否确认退出？" okText="退出" cancelText="取消" onConfirm={onconfirm}>
+            <Popconfirm
+              title="是否确认退出？"
+              okText="退出"
+              cancelText="取消"
+              onConfirm={onConfirm}
+            >
               <LogoutOutlined /> 退出
             </Popconfirm>
           </span>

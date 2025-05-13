@@ -1,35 +1,40 @@
 import "./index.scss";
-import { Card, Form, Input, Button, Radio ,message} from "antd";
+import { Card, Form, Input, Button, Radio } from "antd";
 import logo from "@/assets/logo.png";
-import { useAppDispatch } from '@/store/hook';
-import { fetchLogin } from '@/store/module/user';
-import { useNavigate } from 'react-router-dom';
+import { userLogin } from "@/store/modules/user";
+import { useNavigate, useLocation } from "react-router-dom";
+import { useAppDispatch } from "@/store/hooks";
 
 export interface logindata {
-  moblie: string,
-  code: string,
-  role:string
+  username: string;
+  password: string;
+  role: string;
 }
 
 const Login = () => {
-  const navigate = useNavigate()
-  const dispatch = useAppDispatch()
-  const onFinish = async (values: logindata) => {
-    await dispatch(fetchLogin(values))
-    navigate('/')
-    message.success('登录成功')
-  };
+  const navigate = useNavigate();
+  const location = useLocation();
+  const dispatch = useAppDispatch();
 
-  
+  const onFinish = async (values: logindata) => {
+    try {
+      await dispatch(userLogin(values));
+      // 如果有之前的路径，就跳转回去，否则跳转到首页
+      const from = location.state?.from || "/";
+      navigate(from, { replace: true });
+    } catch (error) {
+      // 错误已经在 userLogin action 中处理了
+      console.error("Login failed:", error);
+    }
+  };
 
   return (
     <div className="login">
       <Card className="login-container">
         <img className="login-logo" src={logo} alt="" />
-        {/* 登录表单 */}
         <Form
           name="login-form"
-          initialValues={{ role: "reviewer" }} // 默认选择审核人员
+          initialValues={{ role: "reviewer" }}
           onFinish={onFinish}
         >
           <Form.Item
